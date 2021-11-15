@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% for Web in Web1 %}
+<url>
+<loc>{{ Web.url }}</loc>
+<changefreq>always</changefreq>
+<priority>1.0</priority>
+</url>
+{% for Category in Category1 %}
+<url>
+<loc>{{ Web.url }}/{{ Category.cslug }}</loc>
+<changefreq>always</changefreq>
+<priority>1.0</priority>
+</url>
+{% for Post in Post1 %}
+<url>
+<loc>{{ Web.url }}/{{ Category.cslug }}/{{ Post.slug }}</loc>
+<lastmod>{{ Post.modified_date|date:'Y-m-d' }}T{{ Post.modified_date|date:'H:i:s' }}+05:30</lastmod>
+<priority>1.0</priority>
+</url>
+{% endfor %}
+{% endfor %}
+{% endfor %}

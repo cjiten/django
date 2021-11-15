@@ -1,0 +1,135 @@
+{% extends 'webpages/base.html' %}
+
+{% block content %}
+
+{% comment %} search {% endcomment %}
+<section class="text-gray-600 body-font">
+    <div class="container px-5 pt-10 pb-5 mt-16 mt mx-auto">
+        <div class="flex flex-col text-center w-full mb-2">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">{{ Web1.search_titel }}</h1>
+        </div>
+        <form method="GET" action="{% url 'search' %}" class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 lg:items-end">
+            <div class="relative flex-grow w-full">
+                <label for="search" class="leading-7 text-sm text-gray-600">Search</label>
+                <input type="search" id="search" name="keyword"
+                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-{{ Web1.colour }}-500 focus:bg-transparent focus:ring-2 focus:ring-{{ Web1.colour }}-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                    placeholder="Search">
+            </div>
+            <button type="submit" class="text-white bg-{{ Web1.colour }}-500 border-0 py-2 px-8 focus:outline-none hover:bg-{{ Web1.colour }}-600 rounded text-lg">
+                Search
+            </button>
+        </form>
+    </div>
+</section>
+
+{% comment %} post page {% endcomment %}
+<section class="text-gray-600 body-font">
+    <div class="container px-5 py-5 mx-auto">
+        <div class="flex flex-wrap w-full mb-5">
+            <div class="lg:w-1/1 w-full mb-5 lg:mb-0">
+                {% for Category in Category1 %}
+                <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">{{ Category.name }}</h1>
+                {% endfor %}
+                <div class="h-1 w-20 bg-{{ Web1.colour }}-500 rounded"></div>
+            </div>
+            {% comment %} breadcrumb {% endcomment %}
+            <nav class="mb-4 lg:mt-4" aria-label="breadcrumb">
+                <ol class="flex leading-none text-{{ Web1.colour }}-600 divide-x divide-{{ Web1.colour }}-400">
+                    <li class="pr-4"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="px-4 text-gray-700">{% for Category in Category1 %}{{ Category.name }}{% endfor %}</li>
+                </ol>
+            </nav>
+        </div>
+        <section class="text-gray-600 body-font">
+            <div class="container px-5 pb-4 mx-auto">
+                <div class="flex flex-wrap -m-4">
+                    {% for Post in Post1 %}
+                    {% for Category in Category1 %}
+                    <div class="p-3 md:w-1/4">
+                        <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                            <a href="/en/{{ Category.cslug }}/{{ Post.slug }}">
+                                <img class="lg:h-48 md:h-36 w-full object-cover object-center"
+                                    src="{{ Post.photo.url }}" alt="{{ Post.name }} {{ Post.name }} {{ Post.name }}">
+                            </a>
+                            <div class="p-6">
+                                <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
+                                    <a href="">{{ Category.name }}</a>
+                                </h2>
+                                <a href="/en/{{ Category.cslug }}/{{ Post.slug }}">
+                                    {% if Category.cslug == 'latest-jobs' %}
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">{{ Post.name }} ({{ Post.board_name_short }}) Recruitment {% if Post.year %}{{ Post.year }}{% endif %}: Check Details</h1>
+                                    {% else %}
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">{{ Post.name }} ({{ Post.board_name_short }}) {{ Category.name }} {% if Post.year %}{{ Post.year }}{% endif %}: Check Details</h1>
+                                    {% endif %}
+                                </a>
+                                <div class="flex items-center flex-wrap ">
+                                    <a href="/en/{{ Category.cslug }}/{{ Post.slug }}"
+                                        class="text-{{ Web1.colour }}-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                                        <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor"
+                                            stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14"></path>
+                                            <path d="M12 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <span
+                                        class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm py-1">
+                                        <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>{{ Post.created_date_only }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+{% comment %} pagination {% endcomment %}
+<nav aria-label="Page navigation" class="flex justify-center mb-4">
+    <ul class="inline-flex space-x-2">
+        {% if Post1.has_previous %}
+        <li><a href="?page={{ Post1.previous_page_number }}"><button
+                    class="flex items-center justify-center w-10 h-10 text-{{ Web1.colour }}-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-{{ Web1.colour }}-100">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                    </svg></button></a>
+        </li>
+        {% endif %}
+        {% if Post1.has_previous %}
+        <li><a href="?page={{ Post1.number|add:'-1' }}"><button
+                    class="w-10 h-10 text-{{ Web1.colour }}-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-{{ Web1.colour }}-100">
+                    {{ Post1.number|add:'-1' }}</button></a>
+        </li>
+        {% endif %}
+        <li><button
+                class="w-10 h-10 text-white transition-colors duration-150 bg-{{ Web1.colour }}-600 border border-r-0 border-{{ Web1.colour }}-600 rounded-full focus:shadow-outline">
+                {{ Post1.number }}</button>
+        </li>
+        {% if Post1.has_next %}
+        <li><a href="?page={{ Post1.number|add:'+1' }}"><button
+                    class="w-10 h-10 text-{{ Web1.colour }}-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-{{ Web1.colour }}-100">
+                    {{ Post1.number|add:'+1' }}</button></a>
+        </li>
+        {% endif %}
+        {% if Post1.has_next %}
+        <li><a href="?page={{ Post1.next_page_number }}"><button
+                    class="flex items-center justify-center w-10 h-10 text-{{ Web1.colour }}-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-{{ Web1.colour }}-100">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                    </svg></button></a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+{% endblock %}

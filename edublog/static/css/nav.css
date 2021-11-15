@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+}
+header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  justify-content: space-between;
+  padding: 18px 2%;
+  transition: 0.2s;
+}
+.mnav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+#menu-icon {
+  z-index: 10001;
+  display: none;
+}
+
+
+/* Making Responsive */
+@media (max-width: 1280px) {
+  header {
+    padding: 11px 4%;
+  }
+  #menu-icon {
+    display: initial;
+  }
+  #darkmode {
+    display: initial;
+    margin-right: 10px;
+  }
+  header .navbar {
+    position: absolute;
+    top: -700px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 4px 4px rgb(0 0 0 / 10%);
+    transition: 1s ease;
+    text-align: center;
+    z-index: -1000;
+  }
+  .mnav {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+  }
+  .navbar.active {
+    top: 100%;
+  }
+  .navbar a {
+    padding: 10px;
+    display: block;
+  }
+}
